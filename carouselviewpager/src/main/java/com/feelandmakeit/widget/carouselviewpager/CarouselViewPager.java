@@ -42,26 +42,42 @@ public class CarouselViewPager extends ViewPager {
 
     @Override
     public void setCurrentItem(int item) {
-        super.setCurrentItem(innerPosToCarouselPos(item));
+        super.setCurrentItem(innerPosToCarouselPos(item), isSmoothScroll);
     }
 
     @Override
     public void addOnPageChangeListener(final @NonNull OnPageChangeListener listener) {
         removeOnPageChangeListener(pageChangeListener);
         OnPageChangeListener wrappedListener = new OnPageChangeListener() {
+            private Runnable action;
             @Override
             public void onPageScrolled(int position, float offset, int offsetPixels) {
                 listener.onPageScrolled(carouselPosToInnerPos(position), offset, offsetPixels);
             }
 
             @Override
-            public void onPageSelected(int position) {
-                listener.onPageSelected(carouselPosToInnerPos(position));
+            public void onPageSelected(final int position) {
+                if (action == null) {
+                    // When the page on the edge is reached, it does not scroll smoothly.
+                    isSmoothScroll = position != 0 && position != wrappedAdapter.getCount() - 1;
+                }
+                action = new Runnable() {
+                    @Override
+                    public void run() {
+                        listener.onPageSelected(carouselPosToInnerPos(position));
+                    }
+                };
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
                 listener.onPageScrollStateChanged(state);
+                if (state == SCROLL_STATE_IDLE) {
+                    if (action != null) {
+                        action.run();
+                        action = null;
+                    }
+                }
             }
         };
         super.addOnPageChangeListener(wrappedListener);

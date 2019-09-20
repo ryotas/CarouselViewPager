@@ -64,10 +64,10 @@ class CarouselPagerAdapter extends PagerAdapter {
      */
     private int getActualPosition(int position) {
         if (position == 0) {
-            // When arrived at the left edge of page.
+            // When the page on the left edge is reached
             return innerAdapter.getCount() - 1;
         } else if (position == getCount() - 1) {
-            // When arrived at the right edge of page.
+            // When the page on the right edge is reached
             return 0;
         } else {
             return position - 1;
