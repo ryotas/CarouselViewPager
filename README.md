@@ -1,6 +1,8 @@
 # CarouselViewPager
 Enabled to scroll ViewPager Infinitely
 
+![demo](https://raw.github.com/wiki/ryotas/CarouselViewPager/images/demo.gif)
+
 # Usage
 Use the same as ViewPager.
 
@@ -19,7 +21,7 @@ allprojects {
   .....
   
 dependencies {
-  implementation 'com.feelandmakeit.widget:carouselviewpager:1.0.0'
+  implementation 'com.feelandmakeit.widget:carouselviewpager:1.0.1'
 }
 ```
 
